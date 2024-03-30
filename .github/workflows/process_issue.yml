@@ -1,0 +1,35 @@
+name: Process Issue and Download Images
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  process_and_download:
+    runs-on: ubuntu-latest
+    if: contains(github.event.issue.title, '[Webhook Request]:')
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Extract IDs and Process Each
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Issue Body: $ISSUE_BODY"
+          # Example for extracting IDs - adjust regex as needed
+          IDS=$(echo "$ISSUE_BODY" | grep -oP 'ID\d: \K[0-9a-f\-]{36}')
+          echo "Extracted IDs: $IDS"
+          
+          # Loop through each extracted ID and call your processing script
+          for ID in $IDS; do
+            echo "Processing ID: $ID"
+            # Replace the following line with the actual command to run your script
+            python extract_and_fetch.py "$ID"
+          done
