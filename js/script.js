@@ -61,15 +61,20 @@ async function sendDiscordEmbed(webhookUrl, productDetails) {
         url: productDetails.storeURL, // URL for the embed
         image: {
             url: productDetails.imageURL // URL of the image to be displayed in the embed
-        },
-        fields: [
+        }
+    };
+    
+    // Check if averageRating is defined and not null
+    if (productDetails.averageRating !== undefined && productDetails.averageRating !== null) {
+        // Add the 'fields' section to the embed
+        embed.fields = [
             {
                 name: `Ratings`,
                 value: `**Average Rating**: ${productDetails.averageRating}/5 \n **Total Ratings**: ${productDetails.totalRatingsCount} \nRatings as of ${localTime}`,
-                inline: true // Set to true if you want the field to display inline
+                inline: true 
             }
-        ]
-    };
+        ];
+    }
 
     try {
         const response = await fetch(webhookUrl, {
@@ -117,8 +122,8 @@ async function getProductDetails(contentFile) {
             imageURL: image,
             creatorName: content.displayProperties.creatorName.toUpperCase(),
             price: content.displayProperties.price,
-            averageRating: content.rating.averageRating,
-            totalRatingsCount: content.rating.totalRatingsCount
+            averageRating: content.rating?.averageRating,
+            totalRatingsCount: content.rating?.totalRatingsCount
         };
 
         return productDetails;
