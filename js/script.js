@@ -39,7 +39,11 @@ async function sendData() {
 }
 
 async function sendDiscordEmbed(webhookUrl, productDetails) {
-       let price = "Unlock this item for FREE";
+    const currentDate = new Date();
+    const timestamp = Math.floor(currentDate.getTime() / 1000);
+    const localTime = `<t:${timestamp}:D>`
+
+    let price = "Unlock this item for FREE";
 
     if(productDetails.price > 0){
         price = `Unlock this item for ${productDetails.price} Minecoins`
@@ -57,7 +61,14 @@ async function sendDiscordEmbed(webhookUrl, productDetails) {
         url: productDetails.storeURL, // URL for the embed
         image: {
             url: productDetails.imageURL // URL of the image to be displayed in the embed
-        }
+        },
+        fields: [
+            {
+                name: `Ratings`,
+                value: `**Average Rating**: ${productDetails.averageRating}/5 \n **Total Ratings**: ${productDetails.totalRatingsCount} \nRatings as of ${localTime}`,
+                inline: true // Set to true if you want the field to display inline
+            }
+        ]
     };
 
     try {
@@ -105,7 +116,9 @@ async function getProductDetails(contentFile) {
             storeURL: `https://www.minecraft.net/en-us/marketplace/pdp?id=${content.id}`,
             imageURL: image,
             creatorName: content.displayProperties.creatorName.toUpperCase(),
-            price: content.displayProperties.price
+            price: content.displayProperties.price,
+            averageRating: content.rating.averageRating,
+            totalRatingsCount: content.rating.totalRatingsCount
         };
 
         return productDetails;
