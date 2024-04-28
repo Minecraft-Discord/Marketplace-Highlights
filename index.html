@@ -11,47 +11,43 @@
 <body>
     
     <div id="container">
+        <div id="info">
+            <h2>Minecraft Discord Marketplace Highlights Sender</h2>
+            <p>This site is a tool to send the weekly Minecraft Bedrock Marketplace Highlights to the Official Minecraft Discord.</p>
+            <p>We send the top 5 content <b>Don't forget to pubish the posts!!!</b></p>
+            <hr>
         <div id="instructions">
             <h2>How to use the site</h2>
-            <p>Enter small text in the input box and click "Add Item" to add a box. Click the top section to expand and reveal the text box to change the itemName. Click the close button on the box to remove it.</p>
-        </div>
-        
-        <div id="generatorContainer">
-            <div id="itemContainer">
+            <p><b> Step 1:</b> Get the content data using the "Open Content JSON".</p>
+            <p><b> Step 2:</b> Once saved, upload to the "Send Maketplace Content"</p>
+            <p><b> Step 3:</b> Add the webhook URL to "Webhook".</p>
+            <p><b> Step 4:</b> Click Send.</p>
+        <div id="firsContainer">
+            <div id="secondContainer">
+                <div id="getJSONContainer">
+                    <hr>
+                    <h2>Open Content JSON</h2>
+                    <div>
+                        <p>Open json data for content, then save it to upload below.</p>
+                        <label for="contentID">Content ID:</label>
+                        <input type="text" id="contentIDInput" placeholder="Enter Content ID..." value="">
+                        <button onclick="openJSON()">Open</button>
+                    </div>
+                    <hr>
+                </div>
                 <div id="webhookContainer">
                     <h2>Send Marketplace Content</h2>
                     <div>
                         <label for="webhook">Webhook:</label>
-                        <input type="text" id="webhook" placeholder="Enter webhook..." value="">
+                        <input type="text" id="webhookInput" placeholder="Enter webhook..." value="" style="width: 300px;">
+                        <label for="content">Content:</label>
+                        <input type="file" id="contentFile" accept=".json" style="width: 300px;">
                     </div>
-                    <hr>
-                    <div>
-                        <label for="conent1">Content 1:</label>
-                        <input type="text" id="webhook" placeholder="Enter storeID..." value="">
-                    </div>
-                    <div>
-                        <label for="conent1">Content 1:</label>
-                        <input type="text" id="webhook" placeholder="Enter storeID..." value="">
-                    </div>
-                    <div>
-                        <label for="conent1">Content 1:</label>
-                        <input type="text" id="webhook" placeholder="Enter storeID..." value="">
-                    </div>
-                    <div>
-                        <label for="conent1">Content 1:</label>
-                        <input type="text" id="webhook" placeholder="Enter storeID..." value="">
-                    </div>
-                    <div>
-                        <label for="conent1">Content 1:</label>
-                        <input type="text" id="webhook" placeholder="Enter storeID..." value="">
-                    </div>
-
-                    <button onclick="addItem('addItemConetainer')">Add Item</button>
+                    <button onclick="sendData()">Send</button>
                     
                     <hr>
                 </div>
-
-                <div id="addItemConetainer">
+                <div id="dataReturnContainer">
                     <!-- Dynamic items will be added here -->
                 </div>
             </div>
@@ -59,9 +55,6 @@
     </div>
 
 <script src="js/script.js"></script>
-<script src="js/block/create.js"></script>
-<script src="js/utils.js"></script>
-<script src="js/component.js"></script>
 
 </body>
 </html>

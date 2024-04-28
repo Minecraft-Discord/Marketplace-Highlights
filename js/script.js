@@ -1,230 +1,161 @@
 // js/script.js
-function addItem(namespaceId) {
-    const container = document.getElementById('itemContainer');
-    const namespace = document.getElementById(namespaceId).value;
+async function sendData() {
+    let errors = [];
+    // Get the value of the webhook input
+    let webhook = document.getElementById("webhookInput").value;
 
-    // Create a box
-    const box = document.createElement('div');
-    box.className = 'box';
+    // Check if the webhook is empty
+    if (webhook.trim() === '') {
+        errors.push("Webhook cannot be blank.");
+    }
 
-    // Create the top section
-    const topSection = document.createElement('div');
-    topSection.className = 'top-section';
-    topSection.onclick = function() {
-        toggleExpanded(this);
-    };
+    // Get the file input field for the content
+    let fileInput = document.getElementById("contentFile");
 
-    // Create the expand button
-    const expandBtn = document.createElement('span');
-    expandBtn.className = 'expand-btn';
-    expandBtn.innerHTML = '▼';
-
-    // Create the namespace-item span
-    const namespaceItem = document.createElement('span');
-    namespaceItem.className = 'namespace-item';
-    namespaceItem.textContent = namespace + ':ItemName';
-
-    // Create the item-name section
-    const itemNameSection = createSection();    
-
-    // Create the itemName input field
-    const itemName = createTextBox(itemNameSection, 'itemName', 'Item', 'Item Name:', 'Enter item name...');
-    itemName.oninput = function() {
-        updateItemName(this, namespaceItem, itemNameText);
-    };
-
-    // Create the dropdown select element
-    createDropdown(itemNameSection, 'dropdown', 'Category:', ["none", "construction", "nature", "equipment", "items"]);
-
-    //Create item group box
-    createTextBox(itemNameSection, 'group', '', 'Group:', 'itemGroup.name.blaze')
- 
-    //create hidden in commands checkbox
-    createCheckBox(itemNameSection, 'hidden', 'hidden', 'Hidden in commands:', false)
-    
-
-    // Create the bottomSection section
-    const bottomSection = createSection();
-    
-    // Create the component button container
-    const componentBtnContainer = document.createElement('div');
-    componentBtnContainer.className = 'component-btn-container';
-
-    // Create the component button
-    const componentBtn = document.createElement('span');
-    componentBtn.className = 'component-btn';
-    componentBtn.innerHTML = 'Add Component';
-    componentBtn.style.marginTop = '10px';
-    componentBtn.onclick = function() {
-        addComponent(this);
-    };
-
-    // Append the component button to its container
-    componentBtnContainer.appendChild(componentBtn);
-
-    
-
-    // Create the item-name text span
-    const itemNameText = document.createElement('span');
-    itemNameText.className = 'item-name-text';
-    itemNameText.textContent = 'ItemName';
-
-    // Create the close button
-    const closeBtn = document.createElement('span');
-    closeBtn.className = 'close-btn';
-    closeBtn.innerHTML = '✕';
-    closeBtn.onclick = function() {
-        removeItem(this);
-    };
-
-    // Append the elements to the top section
-    topSection.appendChild(expandBtn);
-    topSection.appendChild(namespaceItem);
-    topSection.appendChild(itemNameText);
-    topSection.appendChild(closeBtn);
-
-    // Create the expanded section
-    const expandedSection = document.createElement('div');
-    expandedSection.className = 'expanded-section';
-
-    // Append the component button container to the expanded section
-    expandedSection.appendChild(itemNameSection);
-    expandedSection.appendChild(componentBtnContainer); // Add the button container
-        
-
-    // Append the sections to the box
-    box.appendChild(topSection);
-    box.appendChild(expandedSection);
-
-    // Append the box to the container
-    container.insertBefore(box, container.lastElementChild);
-}
-
-
-
-function toggleExpanded(element) {
-    const box = element.closest('.box');
-    const expandedSection = box.querySelector('.expanded-section');
-    const expandBtn = box.querySelector('.expand-btn');
-
-    if (expandedSection.style.display === 'none' || expandedSection.style.display === '') {
-        expandedSection.style.display = 'block';
-        expandBtn.innerHTML = '▲'; // Change the icon to up arrow when expanded
+    // Check if a file has been uploaded
+    if (!fileInput.files || fileInput.files.length === 0) {
+        errors.push("Content file must be uploaded.");
     } else {
-        expandedSection.style.display = 'none';
-        expandBtn.innerHTML = '▼'; // Change the icon to down arrow when collapsed
+        // Get the file from the file input
+        let file = fileInput.files[0];
+        
+        // Call getProductDetails to process the file
+        const productDetails = await getProductDetails(file);
+        if (productDetails) {
+            // Use productDetails object here
+            console.log("Product Details:", productDetails);
+            sendDiscordEmbed(webhook, productDetails);
+        } else {
+            console.log("Failed to fetch product details.");
+        }
+    }
+
+    // If there are errors, display them
+    if (errors.length > 0) {
+        sendError(errors);
+        return; // Exit the function early
+    }
+}
+async function sendDiscordEmbed(webhookUrl, productDetails) {
+    let price = "Unlock this item for FREE";
+
+    if(productDetails.price > 0){
+        price = `Unlock this item for ${productDetails.price} Minecoins`
+    }
+    const embed = {
+        title: productDetails.title,
+        description: productDetails.description,
+        color: 0xFFDC16, // Hex color code
+        author: {
+            name: productDetails.creatorName
+        },
+        footer: {
+            text: price
+        },
+        url: productDetails.storeURL, // URL for the embed
+        image: {
+            url: productDetails.imageURL // URL of the image to be displayed in the embed
+        }
+    };
+
+    try {
+        const response = await fetch(webhookUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ embeds: [embed] })
+        });
+
+        if (response.ok) {
+            console.log('Discord embed sent successfully.');
+        } else {
+            console.error('Failed to send Discord embed:', response.status, response.statusText);
+        }
+    } catch (error) {
+        console.error('Error sending Discord embed:', error);
     }
 }
 
-function removeItem(element) {
-    const box = element.closest('.box');
-    box.parentNode.removeChild(box);
+async function getProductDetails(contentFile) {
+    try {
+        // Read the content of the file as JSON
+        const content = await readFileAsJSON(contentFile);
+        
+        // Extract required fields from the JSON data
+        const productDetails = {
+            id: content.id,
+            title: content.title["en-US"],
+            description: content.description["en-US"],
+            storeURL: `https://www.minecraft.net/en-us/marketplace/pdp?id=${content.id}`,
+            imageURL: extractThumbnailImage(content.images),
+            creatorName: content.displayProperties.creatorName,
+            price: content.displayProperties.price
+        };
+
+        return productDetails;
+    } catch (error) {
+        console.error("Error parsing product details:", error);
+        alert("Error parsing product details:", error.message);
+        return null; // Return null if an error occurs
+    }
 }
 
+function extractThumbnailImage(images) {
+    // Filter the images array to find the image with the tag "Thumbnail"
+    const thumbnailImage = images.find(image => image.type === "Thumbnail");
 
-function updateItemName(itemNameInput, namespaceItem, itemNameText) {
-    let newName = itemNameInput.value;
-    let itemName = itemNameInput.value;
-
-    // Replace spaces with underscores
-    newName = newName.replace(/ /g, '_').toLowerCase();
-
-    // If the item name is empty, use the default item name
-    if (newName.trim() === '') {
-        newName = 'ItemName';
-        itemName = 'ItemName';
+    // If a thumbnail image is found, return its URL
+    if (thumbnailImage) {
+        return thumbnailImage.url;
+    } else {
+        // If no thumbnail image is found, return null or an empty string
+        return null; // You can also return an empty string or handle the absence of a thumbnail image in your application logic
     }
-
-    const namespace = namespaceItem.textContent.split(':')[0];
-    namespaceItem.textContent = namespace + ':' + newName;
-    itemNameText.textContent = itemName;
 }
 
-
-function updateNamespace(namespaceId) {
-    const namespaceInput = document.getElementById(namespaceId);
-    let namespace = namespaceInput.value; // Get the current value
-    const defaultNamespace = namespaceId; // Default namespace value
-
-    // Replace all spaces with underscores
-    namespace = namespace.replace(/ /g, '_');
-
-    // If the namespace is empty or contains only underscores, use the default namespace
-    if (namespace === '' || namespace === '_') {
-        namespace = defaultNamespace;
-    }
-
-    namespaceInput.value = namespace; // Update the value in the input field
-
-    const namespaceItems = document.querySelectorAll('.namespace-item');
-
-    namespaceItems.forEach(function(namespaceItem) {
-        const itemName = namespaceItem.textContent.split(':')[1];
-        namespaceItem.textContent = namespace + ':' + itemName; // Use the updated input value
+// Function to read the content of a file as JSON
+function readFileAsJSON(file) {
+    return new Promise((resolve, reject) => {
+        let reader = new FileReader();
+        reader.onload = function(event) {
+            try {
+                let jsonData = JSON.parse(event.target.result);
+                resolve(jsonData);
+            } catch (error) {
+                reject(error);
+            }
+        };
+        reader.readAsText(file);
     });
 }
 
+function sendError(messages) {
+    if (messages.length === 0) {
+        return; // No messages to display
+    }
 
-function addComponent(button) {
-    // Create a box for the component
-    const box = document.createElement('div');
-    box.className = 'box';
+    let errorMessage = "Errors:\n";
+    for (let i = 0; i < messages.length; i++) {
+        errorMessage += "- " + messages[i] + "\n";
+    }
+    alert(errorMessage);
+}
 
-    // Create the top section for the component
-    const topSection = document.createElement('div');
-    topSection.className = 'top-section';
-    topSection.onclick = function() {
-        toggleExpanded(this);
-    };
+function openJSON(){
+    let errors = [];
+    // Get the value of the webhook input
+    let contentId = document.getElementById("contentIDInput").value;
 
-    // Create the expand button for the component
-    const expandBtn = document.createElement('span');
-    expandBtn.className = 'expand-btn';
-    expandBtn.innerHTML = '▼';
+    // Check if any input field is blank
+    if (contentId.trim() === '') {
+        errors.push("ID cannot be blank.");
+    }
 
-    // Create the item-name section for the component
-    const itemNameSection = createSection();
-    
-    // Create the itemName input field for the component
-    const itemName = createTextBox(itemNameSection, 'itemName', 'Component', 'Component Name:', 'Enter component name...');
-
-    // Create the dropdown select element for the component
-    createDropdown(itemNameSection, 'dropdown', 'Category:', ["none", "construction", "nature", "equipment", "items"]);
-
-    // Create item group box for the component
-    createTextBox(itemNameSection, 'group', '', 'Group:', 'itemGroup.name.blaze')
-
-    // Create hidden in commands checkbox for the component
-    createCheckBox(itemNameSection, 'hidden', 'hidden', 'Hidden in commands:', false)
-
-    // Create the item-name text span for the component
-    const itemNameText = document.createElement('span');
-    itemNameText.className = 'item-name-text';
-    itemNameText.textContent = 'ComponentName';
-
-    // Create the close button for the component
-    const closeBtn = document.createElement('span');
-    closeBtn.className = 'close-btn';
-    closeBtn.innerHTML = '✕';
-    closeBtn.onclick = function() {
-        removeItem(this);
-    };
-
-    // Append the elements to the top section of the component
-    topSection.appendChild(expandBtn);
-    topSection.appendChild(itemNameText);
-    topSection.appendChild(closeBtn);
-
-    // Create the expanded section for the component
-    const expandedSection = document.createElement('div');
-    expandedSection.className = 'expanded-section';
-
-    expandedSection.appendChild(itemNameSection);
-
-    // Append the sections to the box for the component
-    box.appendChild(topSection);
-    box.appendChild(expandedSection);
-
-    // Insert the box before the button
-    button.parentNode.insertBefore(box, button);
+    // If there are errors, display them
+    if (errors.length > 0) {
+        sendError(errors);
+        return; // Exit the function early
+    }
+    window.open(`https://www.minecraft.net/bin/minecraft/productmanagement.productdetails.json?id=${contentId}`, '_blank');
 }
