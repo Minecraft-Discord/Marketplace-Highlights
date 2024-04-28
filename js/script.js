@@ -1,3 +1,7 @@
+import fs from 'fs';
+import path from 'path';
+import fetch from 'node-fetch';
+
 // js/script.js
 async function sendData() {
     let errors = [];
@@ -88,10 +92,15 @@ async function getProductDetails(contentFile) {
             title: content.title["en-US"],
             description: content.description["en-US"],
             storeURL: `https://www.minecraft.net/en-us/marketplace/pdp?id=${content.id}`,
-            imageURL: extractThumbnailImage(content.images),
             creatorName: content.displayProperties.creatorName,
             price: content.displayProperties.price
         };
+
+        // Download image and update imageURL
+        const imageUrl = extractThumbnailImage(content.images);
+        const imageFilename = path.join('imageDump', `${productDetails.id}.jpg`);
+        await downloadImage(imageUrl, imageFilename);
+        productDetails.imageURL = imageFilename;
 
         return productDetails;
     } catch (error) {
@@ -99,6 +108,19 @@ async function getProductDetails(contentFile) {
         alert("Error parsing product details:", error.message);
         return null; // Return null if an error occurs
     }
+}
+
+async function downloadImage(imageUrl, filename) {
+    const response = await fetch(imageUrl);
+    if (!response.ok) {
+        throw new Error(`Failed to download image: ${response.status} ${response.statusText}`);
+    }
+    const fileStream = fs.createWriteStream(filename);
+    await new Promise((resolve, reject) => {
+        response.body.pipe(fileStream);
+        response.body.on("error", reject);
+        fileStream.on("finish", resolve);
+    });
 }
 
 function extractThumbnailImage(images) {
