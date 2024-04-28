@@ -1,7 +1,3 @@
-import fs from 'fs';
-import path from 'path';
-import fetch from 'node-fetch';
-
 // js/script.js
 async function sendData() {
     let errors = [];
@@ -110,6 +106,10 @@ async function getProductDetails(contentFile) {
         return null; // Return null if an error occurs
     }
 }
+
+const fs = require('fs');
+const path = require('path');
+const fetch = require('node-fetch');
 
 async function downloadImage(imageUrl, filename) {
     const response = await fetch(imageUrl);
