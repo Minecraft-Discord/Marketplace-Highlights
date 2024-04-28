@@ -1,0 +1,67 @@
+<!-- index.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketplace Weekly Highlights Sender</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    
+    <div id="container">
+        <div id="instructions">
+            <h2>How to use the site</h2>
+            <p>Enter small text in the input box and click "Add Item" to add a box. Click the top section to expand and reveal the text box to change the itemName. Click the close button on the box to remove it.</p>
+        </div>
+        
+        <div id="generatorContainer">
+            <div id="itemContainer">
+                <div id="webhookContainer">
+                    <h2>Send Marketplace Content</h2>
+                    <div>
+                        <label for="webhook">Webhook:</label>
+                        <input type="text" id="webhook" placeholder="Enter webhook..." value="">
+                    </div>
+                    <hr>
+                    <div>
+                        <label for="conent1">Content 1:</label>
+                        <input type="text" id="webhook" placeholder="Enter storeID..." value="">
+                    </div>
+                    <div>
+                        <label for="conent1">Content 1:</label>
+                        <input type="text" id="webhook" placeholder="Enter storeID..." value="">
+                    </div>
+                    <div>
+                        <label for="conent1">Content 1:</label>
+                        <input type="text" id="webhook" placeholder="Enter storeID..." value="">
+                    </div>
+                    <div>
+                        <label for="conent1">Content 1:</label>
+                        <input type="text" id="webhook" placeholder="Enter storeID..." value="">
+                    </div>
+                    <div>
+                        <label for="conent1">Content 1:</label>
+                        <input type="text" id="webhook" placeholder="Enter storeID..." value="">
+                    </div>
+
+                    <button onclick="addItem('addItemConetainer')">Add Item</button>
+                    
+                    <hr>
+                </div>
+
+                <div id="addItemConetainer">
+                    <!-- Dynamic items will be added here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script src="js/script.js"></script>
+<script src="js/block/create.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/component.js"></script>
+
+</body>
+</html>

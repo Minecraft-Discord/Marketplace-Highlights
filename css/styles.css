@@ -1,0 +1,195 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #3498db; /* Blue background color for the site */
+    overflow-y: auto; /* Enable vertical scrolling when content overflows */
+}
+
+#container {
+    text-align: center;
+    padding: 20px; /* Add some padding for better aesthetics */
+    background-color: #fff; /* White background color for the main container */
+    max-width: 1500px; /* Adjust the width as needed */
+    margin: 0 auto; /* Center the container horizontally */
+}
+#generatorContainer {
+    display: flex; /* This line will lay out the child divs side by side */
+    justify-content: space-around; /* This spreads out the child divs evenly */
+    flex-wrap: wrap; /* Allows the containers to wrap to the next line on smaller screens */
+  }
+  
+  #blockContainer, #itemContainer, #entityContainer {
+    flex: 1; /* Gives each container the ability to grow */
+    min-width: 300px; /* Minimum width for each container, adjust as needed */
+    padding: 10px; /* Optional: Adds some padding inside each container */
+    border: 2px solid #000000; /* 2px thick solid black border */
+    margin: 10px; /* Optional: Adds some space outside the container */
+  }
+  
+  #buttonContainer {
+    /* If you have multiple elements with id="buttonContainer", it's better to use a class instead. */
+    margin-bottom: 20px; /* Optional: Adds some space below the button container */
+  }
+
+.box {
+    border: 1px solid #000;
+    padding: 10px;
+    margin: 10px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease; /* Smooth transition for height change */
+}
+
+.top-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Center horizontally */
+    font-weight: bold;
+    border-bottom: 1px solid #000;
+    padding-right: 30px;
+    transition: background-color 0.3s ease;
+}
+
+
+
+.top-section:hover {
+    background-color: #eee; /* Change color on hover */
+}
+
+/* This ensures that the hover effect does not apply when hovering over the close button */
+.close-btn:hover ~ .top-section {
+    background-color: transparent;
+}
+.expand-btn {
+    margin-right: 10px;
+    cursor: pointer;
+    flex-shrink: 0; /* Prevent the button from shrinking */
+    flex-grow: 0; /* Prevent the button from growing */
+}
+
+.namespace-item {
+    flex-grow: 1; /* Allow this item to grow and fill available space */
+    text-align: left; /* Align the text to the left */
+}
+
+.close-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+    display: inline-block;
+    padding: 2px;
+    width: 15px;
+    height: 15px;
+    border: 1px solid #000;
+    background-color: #ffc0cb;
+    transition: background-color 0.3s;
+    font-size: 12px;
+}
+
+.close-btn:hover {
+    background-color: #ff6666; /* Darker red background color on hover */
+}
+
+/* Ensure top-section background color doesn't change when hovering over close button */
+.close-btn:hover ~ .top-section {
+    background-color: transparent;
+}
+
+.expanded-section {
+    overflow: auto;
+    display: none; /* Initially hidden */
+    padding: 10px;
+    margin-bottom: 10px;
+    border-top: 1px solid #000; /* Separates expanded section from the top section */
+    background-color: #f9f9f9; /* Slightly different background color */
+}
+
+/* Style for the text box and label */
+label {
+    margin-right: 10px;
+}
+
+#namespace,
+#itemName {
+    flex-grow: 1; /* Allow input to grow and occupy remaining space */
+    box-sizing: border-box; /* Include padding and border in the width */
+}
+
+/* Style for the item name section */
+.item-name-section {
+    display: flex; /* Use flex layout */
+    align-items: center; /* Center items vertically */
+    margin-bottom: 5px; /* Add margin for spacing */
+}
+
+/* Item name label */
+.item-name-label {
+    text-align: left; /* Align the text to the left */
+    font-weight: bold; /* Add bold font style if needed */
+    flex-shrink: 0; /* Prevent the label from shrinking */
+    margin-left: 10px;
+}
+
+/* Item name label */
+.dropdown-name-label {
+    text-align: left; /* Align the text to the left */
+    font-weight: bold; /* Add bold font style if needed */
+    margin-right: 10px; /* Add margin for spacing between label and input */
+    margin-left: 10px;
+    flex-shrink: 0; /* Prevent the label from shrinking */
+}
+
+/* Style for the Add Item button */
+button {
+    padding: 10px;
+    margin-top: 10px; /* Add space between the text box and the button */
+}
+
+.expanded-section label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.expanded-section input {
+    width: calc(100% - 22px); /* Take up remaining width, accounting for padding */
+    box-sizing: border-box; /* Include padding and border in the width */
+    margin-bottom: 10px;
+}
+
+.item-name-text {
+    text-align: center;
+    font-weight: bold;
+    flex-grow: 1;
+}
+
+/* Style for the Add Component button */
+.component-btn {
+    padding: 10px;
+    margin-top: 10px; /* Add space between the text box and the button */
+    margin-bottom: 10px; /* Add margin at the bottom for spacing */
+    background-color: #3498db; /* Button background color */
+    color: #fff; /* Button text color */
+    border: none; /* Remove button border */
+    cursor: pointer;
+}
+
+/* Hover effect */
+.component-btn:hover {
+    background-color: #2980b9; /* Darker blue background color on hover */
+}
+
+.component-btn-container {
+    padding: 5px; /* Add padding to the container */
+}
+
+.component-box {
+    border: 1px solid #000;
+    padding: 10px;
+    margin: 10px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease; /* Smooth transition for height change */
+}
