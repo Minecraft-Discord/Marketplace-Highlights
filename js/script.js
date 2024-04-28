@@ -107,21 +107,28 @@ async function getProductDetails(contentFile) {
     }
 }
 
-const fs = require('fs');
-const path = require('path');
-const fetch = require('node-fetch');
-
 async function downloadImage(imageUrl, filename) {
     const response = await fetch(imageUrl);
     if (!response.ok) {
         throw new Error(`Failed to download image: ${response.status} ${response.statusText}`);
     }
-    const fileStream = fs.createWriteStream(filename);
-    await new Promise((resolve, reject) => {
-        response.body.pipe(fileStream);
-        response.body.on("error", reject);
-        fileStream.on("finish", resolve);
-    });
+    
+    const blob = await response.blob();
+    const file = new File([blob], filename, { type: blob.type });
+    
+    // Create a temporary anchor element to trigger the download
+    const anchor = document.createElement('a');
+    anchor.style.display = 'none';
+    anchor.href = URL.createObjectURL(file);
+    anchor.download = filename;
+    document.body.appendChild(anchor);
+    
+    // Trigger the download
+    anchor.click();
+    
+    // Clean up
+    document.body.removeChild(anchor);
+    URL.revokeObjectURL(anchor.href);
 }
 
 function extractThumbnailImage(images) {
