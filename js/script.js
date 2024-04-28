@@ -83,16 +83,17 @@ async function getProductDetails(contentFile) {
     // Get the value of the imageoveride input
     let imageOverideInput = document.getElementById("imageOverideInput").value;
 
-    let image = extractThumbnailImage(content.images);
-
-    // Check if the imageOverideInput is not empty
-    if (imageOverideInput.trim() !== '') {
-        image = imageOverideInput;
-    }
+    
 
     try {
         // Read the content of the file as JSON
         const content = await readFileAsJSON(contentFile);
+        let image = extractThumbnailImage(content.images);
+
+        // Check if the imageOverideInput is not empty
+        if (imageOverideInput.trim() !== '') {
+            image = imageOverideInput;
+        }
         
         // Extract required fields from the JSON data
         const productDetails = {
