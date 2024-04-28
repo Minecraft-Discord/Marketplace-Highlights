@@ -67,8 +67,9 @@ async function sendDiscordEmbed(webhookUrl, productDetails) {
             },
             body: JSON.stringify({ embeds: [embed] })
         });
-
+        console.log("Sending Embed:", embed);
         if (response.ok) {
+            
             console.log('Discord embed sent successfully.');
         } else {
             console.error('Failed to send Discord embed:', response.status, response.statusText);
