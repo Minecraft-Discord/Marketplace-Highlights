@@ -27,7 +27,6 @@ async function sendData() {
         const productDetails = await getProductDetails(file);
         if (productDetails) {
             // Use productDetails object here
-            console.log("Product Details:", productDetails);
             sendDiscordEmbed(webhook, productDetails);
         } else {
             console.log("Failed to fetch product details.");
@@ -61,6 +60,8 @@ async function sendDiscordEmbed(webhookUrl, productDetails) {
             url: productDetails.imageURL // URL of the image to be displayed in the embed
         }
     };
+
+    console.log("Sending Embed", embed);
 
     try {
         const response = await fetch(webhookUrl, {
