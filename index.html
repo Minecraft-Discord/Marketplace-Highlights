@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marketplace Weekly Highlights Sender</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/minecraft.css">
 </head>
 <body>
     
@@ -16,12 +17,17 @@
             <p>This site is a tool to send the weekly Minecraft Bedrock Marketplace Highlights to the Official Minecraft Discord.</p>
             <p>We send the top 5 content <b>Don't forget to publish the posts!!!</b></p>
             <hr>
-        <div id="instructions">
+        <div id="instructionsContainer">
             <h2>How to use the site</h2>
-            <p><b> Step 1:</b> Get the content data using the "Open Content JSON".</p>
-            <p><b> Step 2:</b> Save and upload or paste it into the"Send Maketplace Content"</p>
-            <p><b> Step 3:</b> Add the webhook URL to "Webhook".</p>
-            <p><b> Step 4:</b> Click Send.</p>
+            <div class="centered">
+                <p class="instructions"><b> Step 1:</b> Get the content data using the "Open Content JSON".</p>
+                <p class="instructions"><b> Step 2:</b> Save and upload into the"Send Maketplace Content"</p>
+                <p class="instructions"><b> Step 3:</b> Add the webhook URL to "Webhook".</p>
+                <p class="instructions"><b> Step 4:</b> Click Send.</p>
+          </div>  
+        </div>
+        
+            
         <div id="firsContainer">
             <div id="secondContainer">
                 <div id="getJSONContainer">
@@ -31,7 +37,7 @@
                         <p>Open json data for content, then save it to upload below.</p>
                         <label for="contentID">Content ID:</label>
                         <input type="text" id="contentIDInput" placeholder="Enter Content ID..." value="">
-                        <button onclick="openJSON()">Open</button>
+                        <button class="mc-button" onclick="openJSON()">Open</button>
                     </div>
                     <hr>
                 </div>
@@ -43,17 +49,25 @@
                     </div>
                     <div>
                         <label for="content">Content:</label>
-                        <input type="file" id="contentFile" accept=".json" style="width: 600px;">
+                        <label for="contentFile" class="mc-filebutton">Choose File</label>
+                        <input type="file" id="contentFile" accept=".json">
+                        <span id="fileName">No file chosen</span>
                     </div>
                     <div>
-                        <p>Use this if you want to overide the thumbnail URL to a perm link.</p>
-                        <label for="imageOveride">Image Override:</label>
-                        <input type="text" id="imageOverideInput" placeholder="Enter image URL..." value="" style="width: 600px;">
+                        <p>Use this if you want to override the thumbnail URL to a perm link.</p>
+                        <label for="imageOverride">Image Override:</label>
+                        <input type="text" id="imageOverrideInput" placeholder="Enter image URL..." value="" style="width: 600px;">
                     </div>
-                    <button onclick="sendData()">Send</button>
-                    
-                    <hr>
-                </div>
+                    <div id="preview">
+                        <button class="mc-button" onclick="previewData()">Preview</button>
+                        <h2>Preview</h2>
+                        <div class="discord-embed">
+                        </div>
+                        <button class="mc-button" onclick="sendData()">Send</button>
+                        
+                        <hr>
+                    </div>
+                    </div>
                 <div id="dataReturnContainer">
                     <!-- Dynamic items will be added here -->
                 </div>

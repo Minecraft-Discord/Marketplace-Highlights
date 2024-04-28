@@ -1,203 +1,142 @@
 body {
     margin: 0;
     padding: 0;
-    background-color: #3498db; /* Blue background color for the site */
+    background-color: #1873af; /* Blue background color for the site */
     overflow-y: auto; /* Enable vertical scrolling when content overflows */
+}
+hr {
+    margin-top: 20px; /* Add margin above the <hr> */
+    margin-bottom: 20px; /* Add margin below the <hr> */
+}
+
+.instructions {
+    text-align: center;
+}
+.centered {
+    text-align: center; /* Center the text inside the container */
+}
+
+.instructionsContainer {
+    display: flex;
+    justify-content: center; /* Center the content horizontally */
+}
+
+/* Hide the default file input */
+#contentFile {
+    display: none;
 }
 
 #container {
     text-align: center;
     padding: 20px; /* Add some padding for better aesthetics */
-    background-color: #fff; /* White background color for the main container */
-    max-width: 1500px; /* Adjust the width as needed */
+    background-color: #c5c5c5; /* White background color for the main container */
+    max-width: 1000px; /* Adjust the width as needed */
     margin: 0 auto; /* Center the container horizontally */
+    
 }
-#generatorContainer {
-    display: flex; /* This line will lay out the child divs side by side */
-    justify-content: space-around; /* This spreads out the child divs evenly */
-    flex-wrap: wrap; /* Allows the containers to wrap to the next line on smaller screens */
-  }
-  
-  #blockContainer, #itemContainer, #entityContainer {
-    flex: 1; /* Gives each container the ability to grow */
-    min-width: 300px; /* Minimum width for each container, adjust as needed */
-    padding: 10px; /* Optional: Adds some padding inside each container */
-    border: 2px solid #000000; /* 2px thick solid black border */
-    margin: 10px; /* Optional: Adds some space outside the container */
-  }
-  
-  #buttonContainer {
-    /* If you have multiple elements with id="buttonContainer", it's better to use a class instead. */
-    margin-bottom: 20px; /* Optional: Adds some space below the button container */
-  }
 
-.box {
-    border: 1px solid #000;
+
+#preview {
+    margin: 0 auto; /* Center the div horizontally */
+    max-width: 600px; /* Optional: Set a maximum width for the preview */
+}
+
+#embed-preview {
+    background-color: #2B2D31; /* Dark background color */
+    color: #ffffff; /* White text color */
     padding: 10px;
-    margin: 10px;
-    position: relative;
-    cursor: pointer;
-    transition: all 0.3s ease; /* Smooth transition for height change */
+    border-radius: 5px;
+    text-align: left; /* Align text to the left */
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Discord's UI font */
+    margin: 0 auto; /* Center align horizontally */
 }
 
-.top-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center; /* Center horizontally */
+.discord-embed .image-container img {
+    max-width: 100%; /* Limit the maximum width of the image */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 5px; /* Apply border radius */
+    display: block; /* Ensure the image behaves as a block element */
+    margin-top: 10px; /* Add some space above the image */
+}
+
+#embed-preview .image {
+    max-width: 100%; /* Limit the maximum width of the image */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 5px; /* Apply border radius */
+    display: block; /* Ensure the image behaves as a block element */
+    margin-top: 10px; /* Add some space above the image */
+}
+
+#embed-preview h2 {
+    color: #7289DA; /* Discord highlight blue */
+    font-size: 14px; /* Adjusted font size */
+    margin-bottom: 10px;
+}
+
+.discord-embed {
+    background-color: #2B2D31; /* Dark background color */
+    border: 1px solid #2B2D31; /* Dark border color */
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    max-width: 400px; /* Adjust as needed */
+    width: 100%;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Discord's UI font */
+    border-left: 5px solid rgb(255, 220, 22); /* Left border with specified color */
+    font-size: 12px; /* Adjusted font size */
+}
+.discord-embed .title {
+    color: #5D9FFF; /* Discord highlight blue */
     font-weight: bold;
-    border-bottom: 1px solid #000;
-    padding-right: 30px;
-    transition: background-color 0.3s ease;
+    text-align: left; /* Align text to the left */
+    text-decoration: none; 
+}
+.discord-embed .title a {
+    color: #5D9FFF; 
+    text-decoration: none; 
 }
 
-
-
-.top-section:hover {
-    background-color: #eee; /* Change color on hover */
+.discord-embed .description {
+    color: #ffffff; /* White text color */
+    margin-top: 5px;
+    text-align: left; /* Align text to the left */
 }
 
-/* This ensures that the hover effect does not apply when hovering over the close button */
-.close-btn:hover ~ .top-section {
-    background-color: transparent;
-}
-.expand-btn {
-    margin-right: 10px;
-    cursor: pointer;
-    flex-shrink: 0; /* Prevent the button from shrinking */
-    flex-grow: 0; /* Prevent the button from growing */
+.discord-embed .author {
+    color: #FFFFFF; /* White text color */
+    font-style: italic;
+    margin-top: 5px;
+    text-align: left; /* Align text to the left */
 }
 
-.namespace-item {
-    flex-grow: 1; /* Allow this item to grow and fill available space */
-    text-align: left; /* Align the text to the left */
-}
-
-.close-btn {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    cursor: pointer;
-    display: inline-block;
-    padding: 2px;
-    width: 15px;
-    height: 15px;
-    border: 1px solid #000;
-    background-color: #ffc0cb;
-    transition: background-color 0.3s;
+.discord-embed .footer {
+    color: #ffffff; /* White text color */
     font-size: 12px;
+    margin-top: 5px;
+    text-align: left; /* Align text to the left */
 }
 
-.close-btn:hover {
-    background-color: #ff6666; /* Darker red background color on hover */
+.discord-embed .ratings {
+    color: #ffffff; /* White text color */
+    margin-top: 10px;
+    text-align: left; /* Align text to the left */
 }
 
-/* Ensure top-section background color doesn't change when hovering over close button */
-.close-btn:hover ~ .top-section {
-    background-color: transparent;
-}
-
-.expanded-section {
-    overflow: auto;
-    display: none; /* Initially hidden */
-    padding: 10px;
-    margin-bottom: 10px;
-    border-top: 1px solid #000; /* Separates expanded section from the top section */
-    background-color: #f9f9f9; /* Slightly different background color */
-}
-
-/* Style for the text box and label */
-label {
-    margin-right: 10px;
-}
-
-#namespace,
-#itemName {
-    flex-grow: 1; /* Allow input to grow and occupy remaining space */
-    box-sizing: border-box; /* Include padding and border in the width */
-}
-
-/* Style for the item name section */
-.item-name-section {
-    display: flex; /* Use flex layout */
-    align-items: center; /* Center items vertically */
-    margin-bottom: 5px; /* Add margin for spacing */
-}
-
-/* Item name label */
-.item-name-label {
-    text-align: left; /* Align the text to the left */
-    font-weight: bold; /* Add bold font style if needed */
-    flex-shrink: 0; /* Prevent the label from shrinking */
-    margin-left: 10px;
-}
-
-/* Item name label */
-.dropdown-name-label {
-    text-align: left; /* Align the text to the left */
-    font-weight: bold; /* Add bold font style if needed */
-    margin-right: 10px; /* Add margin for spacing between label and input */
-    margin-left: 10px;
-    flex-shrink: 0; /* Prevent the label from shrinking */
-}
-
-/* Style for the Add Item button */
-button {
-    padding: 10px;
-    margin-top: 10px; /* Add space between the text box and the button */
-}
-
-.expanded-section label {
-    display: block;
+.discord-embed .ratings .rating-title {
     font-weight: bold;
-    margin-bottom: 5px;
 }
 
-.expanded-section input {
-    width: calc(100% - 22px); /* Take up remaining width, accounting for padding */
-    box-sizing: border-box; /* Include padding and border in the width */
-    margin-bottom: 10px;
+.discord-embed .field {
+    color: #ffffff; /* White text color */
+    margin-top: 10px;
+    text-align: left; /* Align text to the left */
 }
 
-.item-name-text {
-    text-align: center;
+.discord-embed .field .name {
     font-weight: bold;
-    flex-grow: 1;
 }
 
-/* Style for the Add Component button */
-.component-btn {
-    padding: 10px;
-    margin-top: 10px; /* Add space between the text box and the button */
-    margin-bottom: 10px; /* Add margin at the bottom for spacing */
-    background-color: #3498db; /* Button background color */
-    color: #fff; /* Button text color */
-    border: none; /* Remove button border */
-    cursor: pointer;
+.discord-embed .field .value {
+    margin-top: 5px;
+    text-align: left; /* Align text to the left */
 }
-
-/* Hover effect */
-.component-btn:hover {
-    background-color: #2980b9; /* Darker blue background color on hover */
-}
-
-.component-btn-container {
-    padding: 5px; /* Add padding to the container */
-}
-
-.component-box {
-    border: 1px solid #000;
-    padding: 10px;
-    margin: 10px;
-    position: relative;
-    cursor: pointer;
-    transition: all 0.3s ease; /* Smooth transition for height change */
-}
-
-textarea {
-    width: 100%; /* Set the width to 100% of its container */
-    height: 200px; /* Set the height to your desired value */
-    padding: 10px; /* Add padding for better appearance */
-    resize: vertical; /* Allow vertical resizing */
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
-  }
