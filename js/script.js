@@ -23,6 +23,7 @@ async function sendData() {
         const productDetails = await getProductDetails(file);
         if (productDetails) {
             // Use productDetails object here
+            console.log("Product Details:", productDetails);
             sendDiscordEmbed(webhook, productDetails);
         } else {
             console.log("Failed to fetch product details.");
@@ -35,6 +36,7 @@ async function sendData() {
         return; // Exit the function early
     }
 }
+
 async function sendDiscordEmbed(webhookUrl, productDetails) {
     let price = "Unlock this item for FREE";
 
@@ -57,8 +59,6 @@ async function sendDiscordEmbed(webhookUrl, productDetails) {
         }
     };
 
-    console.log("Sending Embed", embed);
-
     try {
         const response = await fetch(webhookUrl, {
             method: 'POST',
@@ -79,6 +79,17 @@ async function sendDiscordEmbed(webhookUrl, productDetails) {
 }
 
 async function getProductDetails(contentFile) {
+
+    // Get the value of the imageoveride input
+    let imageOverideInput = document.getElementById("imageOverideInput").value;
+
+    let image = extractThumbnailImage(content.images);
+
+    // Check if the imageOverideInput is not empty
+    if (imageOverideInput.trim() !== '') {
+        image = imageOverideInput;
+    }
+
     try {
         // Read the content of the file as JSON
         const content = await readFileAsJSON(contentFile);
@@ -89,15 +100,10 @@ async function getProductDetails(contentFile) {
             title: content.title["en-US"],
             description: content.description["en-US"],
             storeURL: `https://www.minecraft.net/en-us/marketplace/pdp?id=${content.id}`,
+            imageURL: image,
             creatorName: content.displayProperties.creatorName,
             price: content.displayProperties.price
         };
-
-        // Download image and update imageURL
-        const imageUrl = extractThumbnailImage(content.images);
-        const imageFilename = path.join('imageDump', `${productDetails.id}.jpg`);
-        await downloadImage(imageUrl, imageFilename);
-        productDetails.imageURL = imageFilename;
 
         return productDetails;
     } catch (error) {
@@ -105,30 +111,6 @@ async function getProductDetails(contentFile) {
         alert("Error parsing product details:", error.message);
         return null; // Return null if an error occurs
     }
-}
-
-async function downloadImage(imageUrl, filename) {
-    const response = await fetch(imageUrl);
-    if (!response.ok) {
-        throw new Error(`Failed to download image: ${response.status} ${response.statusText}`);
-    }
-    
-    const blob = await response.blob();
-    const file = new File([blob], filename, { type: blob.type });
-    
-    // Create a temporary anchor element to trigger the download
-    const anchor = document.createElement('a');
-    anchor.style.display = 'none';
-    anchor.href = URL.createObjectURL(file);
-    anchor.download = filename;
-    document.body.appendChild(anchor);
-    
-    // Trigger the download
-    anchor.click();
-    
-    // Clean up
-    document.body.removeChild(anchor);
-    URL.revokeObjectURL(anchor.href);
 }
 
 function extractThumbnailImage(images) {

@@ -40,8 +40,15 @@
                     <div>
                         <label for="webhook">Webhook:</label>
                         <input type="text" id="webhookInput" placeholder="Enter webhook..." value="" style="width: 300px;">
+                    </div>
+                    <div>
                         <label for="content">Content:</label>
                         <input type="file" id="contentFile" accept=".json" style="width: 300px;">
+                    </div>
+                    <div>
+                        <p>Use this if you want to overide the thumbnail URL to a perm link.</p>
+                        <label for="imageOveride">Image Override:</label>
+                        <input type="text" id="imageOverideInput" placeholder="Enter image URL..." value="" style="width: 300px;">
                     </div>
                     <button onclick="sendData()">Send</button>
                     
