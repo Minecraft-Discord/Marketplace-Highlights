@@ -3,6 +3,7 @@ async function sendData() {
     let errors = [];
     // Get the value of the webhook input
     let webhook = document.getElementById("webhookInput").value;
+    
 
     // Check if the webhook is empty
     if (webhook.trim() === '') {
@@ -38,7 +39,7 @@ async function sendData() {
 }
 
 async function sendDiscordEmbed(webhookUrl, productDetails) {
-    let price = "Unlock this item for FREE";
+       let price = "Unlock this item for FREE";
 
     if(productDetails.price > 0){
         price = `Unlock this item for ${productDetails.price} Minecoins`
@@ -48,7 +49,7 @@ async function sendDiscordEmbed(webhookUrl, productDetails) {
         description: productDetails.description,
         color: 0xFFDC16, // Hex color code
         author: {
-            name: productDetails.creatorName
+            name: "BY " + productDetails.creatorName
         },
         footer: {
             text: price
@@ -65,7 +66,7 @@ async function sendDiscordEmbed(webhookUrl, productDetails) {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ embeds: [embed] })
+            body: JSON.stringify({ embeds: [embed]})
         });
         console.log("Sending Embed:", embed);
         if (response.ok) {
@@ -99,11 +100,11 @@ async function getProductDetails(contentFile) {
         // Extract required fields from the JSON data
         const productDetails = {
             id: content.id,
-            title: content.title["en-US"],
+            title: content.title["en-US"].toUpperCase(),
             description: content.description["en-US"],
             storeURL: `https://www.minecraft.net/en-us/marketplace/pdp?id=${content.id}`,
             imageURL: image,
-            creatorName: content.displayProperties.creatorName,
+            creatorName: content.displayProperties.creatorName.toUpperCase(),
             price: content.displayProperties.price
         };
 

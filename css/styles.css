@@ -193,3 +193,11 @@ button {
     cursor: pointer;
     transition: all 0.3s ease; /* Smooth transition for height change */
 }
+
+textarea {
+    width: 100%; /* Set the width to 100% of its container */
+    height: 200px; /* Set the height to your desired value */
+    padding: 10px; /* Add padding for better appearance */
+    resize: vertical; /* Allow vertical resizing */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  }
